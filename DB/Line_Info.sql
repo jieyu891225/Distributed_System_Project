@@ -1,5 +1,5 @@
 CREATE TABLE Line_Info (
 	Nick_Name VARCHAR,
-	Channel_Id VARCHAR,
+	Access_Token VARCHAR,
 	Channel_Secret VARCHAR
 );
