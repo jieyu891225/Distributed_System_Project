@@ -13,13 +13,13 @@ async function getLineInfo(){
     const res = await client.query(query);
     const rows = res.rows;
     rows.map(row => {
-        line_info.push(new LineInfo(row['nick_name'], row['access_token'], row['channel_secret']));
+        line_info.push(new LineInfo(row['nick_name'], row['access_token'], row['channel_secret'], row['user_id']));
     });
     return line_info;
 }
 
 async function updateLineInfo(info){
-    const query =  `UPDATE Line_Info SET Access_Token='${info.access_token}',Channel_Secret='${info.channel_secret}' WHERE Nick_Name='${info.nick_name}';`;
+    const query =  `UPDATE Line_Info SET Access_Token='${info.access_token}',Channel_Secret='${info.channel_secret}',User_Id='${info.user_id}' WHERE Nick_Name='${info.nick_name}';`;
     const res = await client.query(query) 
         .then(result => {
         console.log('Update completed');
