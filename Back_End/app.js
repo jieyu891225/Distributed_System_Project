@@ -1,18 +1,18 @@
-const Db = require('./DB');
-const express = require('express');
-var app = express();
+import db from './DB.js';
+import express from 'express';
+const app = express();
 
 app.use(express.json());
 
 
 app.get('/line_info', function (req, res) {
-    Db.getLineInfo(req.query.user_id).then(function(result){
+    db.getLineInfos(req.query.user_id).then(function(result){
         res.json(result)
     });
 })
 
 app.put('/line_info', function(req, res) {
-    Db.updateLineInfo(req.query).then(function(result){
+    db.updateLineInfo(req.query).then(function(result){
         if(result==true){
             res.status(200);
             res.end();

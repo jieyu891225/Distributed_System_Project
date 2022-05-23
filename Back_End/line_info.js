@@ -7,4 +7,4 @@ class LineInfo {
     }
   }
 
-module.exports = LineInfo 
+export default LineInfo;
