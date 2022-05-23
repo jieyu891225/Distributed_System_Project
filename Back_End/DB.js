@@ -7,8 +7,8 @@ client.connect(err => {
     if (err) throw err;
 });
 
-async function getLineInfo(){
-    const query = `SELECT * From Line_Info;`
+async function getLineInfo(user_id){
+    const query = `SELECT nick_name, access_token, channel_secret From line_info WHERE user_id='${user_id}';`
     let line_info = [];
     const res = await client.query(query);
     const rows = res.rows;
@@ -18,10 +18,15 @@ async function getLineInfo(){
     return line_info;
 }
 
-async function updateLineInfo(info){
-    const query =  `UPDATE Line_Info SET Access_Token='${info.access_token}',Channel_Secret='${info.channel_secret}',User_Id='${info.user_id}' WHERE Nick_Name='${info.nick_name}';`;
-    const res = await client.query(query) 
-        .then(result => {
+async function updateLineInfo(req){
+    console.log(req)
+    const query =  `
+        INSERT INTO line_info (access_token, channel_secret, user_id, nick_name)
+        VALUES ('${req.access_token}', '${req.channel_secret}', '${req.user_id}', '${req.nick_name}')
+        ON CONFLICT (user_id, nick_name) DO UPDATE
+        SET access_token='${req.access_token}',
+            channel_secret='${req.channel_secret}';`;
+    const res = await client.query(query).then(result => {
         console.log('Update completed');
     });
     return true;
