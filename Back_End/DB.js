@@ -1,13 +1,25 @@
-const config = require('./dbconfig');
-const pg = require('pg');
-const LineInfo = require('./line_info');
+import config from './dbconfig.js';
+import pg from 'pg';
+import LineInfo from './line_info.js';
 const client = new pg.Client(config);
 
+// client.connect(config)
 client.connect(err => {
     if (err) throw err;
 });
 
-async function getLineInfo(user_id){
+async function getLineInfo(user_id, nick_name){
+    const query = `SELECT access_token, channel_secret From line_info WHERE user_id='${user_id}' AND nick_name = '${nick_name}';`
+    let line_info = [];
+    const res = await client.query(query);
+    const rows = res.rows;
+    rows.map(row => {
+        line_info.push(row['access_token'], row['channel_secret']);
+    });
+    return line_info;
+}
+
+async function getLineInfos(user_id){
     const query = `SELECT nick_name, access_token, channel_secret From line_info WHERE user_id='${user_id}';`
     let line_info = [];
     const res = await client.query(query);
@@ -32,7 +44,4 @@ async function updateLineInfo(req){
     return true;
 }
 
-module.exports = {
-    getLineInfo:getLineInfo,
-    updateLineInfo:updateLineInfo
-}
+export default {getLineInfo, getLineInfos, updateLineInfo};
