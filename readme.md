@@ -12,7 +12,7 @@
 ```npm install```
  to install node modules
 
-```npm start```
+```node app.js```
  to run server on localhost:8001
 
 # API
